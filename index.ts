@@ -66,7 +66,7 @@ bot.on("like", async (like) => {
     const query = db.prepare("SELECT * FROM labels WHERE uri == $uri");
     const result = query.all({ $uri: like.user.did });
 
-    if (result) {
+    if (result.length > 0) {
       console.log("User", like.user.did, "already has a label");
       return;
     }
