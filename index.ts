@@ -2,7 +2,7 @@ import { LabelerServer } from "@skyware/labeler";
 import { Bot, Labeler } from "@skyware/bot";
 import { Database } from "bun:sqlite";
 
-const db = new Database("./data/labels.db");
+const db = new Database("./data/labels.db", {readonly: true});
 
 const server = new LabelerServer({
   did: process.env.LABELER_DID,
