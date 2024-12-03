@@ -2,8 +2,6 @@ import { LabelerServer } from "@skyware/labeler";
 import { Bot, Labeler } from "@skyware/bot";
 import { Database } from "bun:sqlite";
 
-const db = new Database("./data/labels.db", {readonly: true});
-
 const server = new LabelerServer({
   did: process.env.LABELER_DID,
   signingKey: process.env.LABELER_KEY,
@@ -17,6 +15,8 @@ server.start({ host: "0.0.0.0", port: 14831 }, (error, address) => {
     console.log("Server started on", address);
   }
 });
+
+const db = new Database("./data/labels.db", { readonly: true });
 
 const bot = new Bot();
 
