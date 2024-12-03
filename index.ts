@@ -4,8 +4,6 @@ import { Database } from "bun:sqlite";
 
 const db = new Database("./data/labels.db");
 
-const query = db.prepare("SELECT * FROM labels WHERE uri == $uri");
-
 const server = new LabelerServer({
   did: process.env.LABELER_DID,
   signingKey: process.env.LABELER_KEY,
@@ -65,7 +63,8 @@ bot.on("like", async (like) => {
       "togepi",
     ];
 
-    const result = query.get({ $uri: like.user.did });
+    const query = db.prepare("SELECT * FROM labels WHERE uri == $uri");
+    const result = query.all({ $uri: like.user.did });
 
     if (result) {
       console.log("User", like.user.did, "already has a label");
