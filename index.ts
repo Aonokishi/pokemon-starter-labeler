@@ -1,13 +1,5 @@
 import { LabelerServer } from "@skyware/labeler";
-import { Bot, Post } from "@skyware/bot";
-import postsData from "./posts.json";
-
-const POSTS: {
-  delete: string;
-  labels: Record<string, string>;
-} = postsData;
-
-const LABELS = Object.values(POSTS.labels);
+import { Bot, Labeler } from "@skyware/bot";
 
 const server = new LabelerServer({
   did: process.env.LABELER_DID,
@@ -31,25 +23,51 @@ await bot.login({
 });
 
 bot.on("like", async (like) => {
-  if (like.subject instanceof Post) {
+  if (like.subject instanceof Labeler) {
     console.log("Received like", like.user.did, like.subject.uri);
+    const labels = [
+      "bulbasaur",
+      "charmander",
+      "squirtle",
+      "pikachu",
+      "eevee",
+      "chikorita",
+      "cyndaquil",
+      "totodile",
+      "marill",
+      "treecko",
+      "torchic",
+      "mudkip",
+      "ralts",
+      "turtwig",
+      "chimchar",
+      "piplup",
+      "snivy",
+      "tepig",
+      "oshawott",
+      "chespin",
+      "fennekin",
+      "froakie",
+      "rowlet",
+      "litten",
+      "popplio",
+      "grookey",
+      "scorbunny",
+      "sobble",
+      "sprigatito",
+      "fuecoco",
+      "quaxly",
+      "togepi",
+    ];
 
-    const label = POSTS.labels[like.subject.uri];
+    const randomLabel = labels[Math.floor(Math.random() * labels.length)];
 
-    if (label) {
-      try {
-        await like.user.labelAccount([label]);
-        console.log("Labeled account", like.user.did, label);
-      } catch (error) {
-        console.error("Failed to label account", error);
-      }
-    } else if (like.subject.uri === POSTS.delete) {
-      try {
-        await like.user.negateAccountLabels(LABELS);
-        console.log("Negated account labels", like.user.did);
-      } catch (error) {
-        console.error("Failed to negate account labels", error);
-      }
+    try {
+      await like.user.negateAccountLabels(labels);
+      await like.user.labelAccount([randomLabel]);
+      console.log("Labeled account", like.user.did, "with", randomLabel);
+    } catch (errors) {
+      console.error("Error labeling account", errors);
     }
   }
 });

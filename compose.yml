@@ -1,6 +1,6 @@
 services:
   labeler:
-    image: ghcr.io/doctorjohn/feature-request-labeler:latest
+    image: ghcr.io/aonokishi/pokemon-starter-labeler:latest
     build: .
     env_file:
       - ./.env

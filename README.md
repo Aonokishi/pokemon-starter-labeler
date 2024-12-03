@@ -1,4 +1,4 @@
-# feature-request-labeler
+# pokemon-starter-labeler
 
 To install dependencies:
 
