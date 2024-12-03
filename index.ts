@@ -1,5 +1,10 @@
 import { LabelerServer } from "@skyware/labeler";
 import { Bot, Labeler } from "@skyware/bot";
+import { Database } from "bun:sqlite";
+
+const db = new Database("./data/labels.db");
+
+const query = db.prepare("SELECT * FROM labels WHERE uri == $uri");
 
 const server = new LabelerServer({
   did: process.env.LABELER_DID,
@@ -60,12 +65,19 @@ bot.on("like", async (like) => {
       "togepi",
     ];
 
+    const result = query.get({ $uri: like.user.did });
+
+    if (result) {
+      console.log("User", like.user.did, "already has a label");
+      return;
+    }
+
     const randomLabel = labels[Math.floor(Math.random() * labels.length)];
 
     try {
-      await like.user.negateAccountLabels(labels);
       await like.user.labelAccount([randomLabel]);
       console.log("Labeled account", like.user.did, "with", randomLabel);
+      console.log("Account labels", like.user.labels);
     } catch (errors) {
       console.error("Error labeling account", errors);
     }
