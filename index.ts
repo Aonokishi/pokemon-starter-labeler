@@ -1,6 +1,5 @@
 import { LabelerServer } from "@skyware/labeler";
 import { Bot, Labeler } from "@skyware/bot";
-import { Database } from "bun:sqlite";
 
 const server = new LabelerServer({
   did: process.env.LABELER_DID,
@@ -15,8 +14,6 @@ server.start({ host: "0.0.0.0", port: 14831 }, (error, address) => {
     console.log("Server started on", address);
   }
 });
-
-const db = new Database("./data/labels.db", { readonly: true });
 
 const bot = new Bot();
 
@@ -63,10 +60,12 @@ bot.on("like", async (like) => {
       "togepi",
     ];
 
-    const query = db.prepare("SELECT * FROM labels WHERE uri == $uri");
-    const result = query.all({ $uri: like.user.did });
+    const result = await server.db.execute({
+      sql: "SELECT * FROM labels WHERE uri == ?",
+      args: [like.user.did],
+    });
 
-    if (result.length > 0) {
+    if (result.rows.length > 0) {
       console.log("User", like.user.did, "already has a label");
       return;
     }
