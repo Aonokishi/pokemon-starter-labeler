@@ -9,6 +9,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@sentry/bun": "^8.42.0",
     "@skyware/bot": "^0.3.8",
     "@skyware/labeler": "^0.2.0"
   }

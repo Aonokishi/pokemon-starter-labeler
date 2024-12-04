@@ -1,5 +1,11 @@
+import * as Sentry from "@sentry/bun";
 import { LabelerServer } from "@skyware/labeler";
 import { Bot, Labeler } from "@skyware/bot";
+
+Sentry.init({
+  dsn: process.env.LABELER_DSN,
+  tracesSampleRate: 1.0,
+});
 
 const server = new LabelerServer({
   did: process.env.LABELER_DID,
