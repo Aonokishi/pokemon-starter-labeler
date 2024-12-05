@@ -64,6 +64,7 @@ bot.on("like", async (like) => {
       "fuecoco",
       "quaxly",
       "togepi",
+      "munchlax",
     ];
 
     const result = await server.db.execute({
